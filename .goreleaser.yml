@@ -1,0 +1,72 @@
+---
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=1
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - id: yb-linux
+    main: ./cmd/yb/yb.go
+    binary: yb
+    ldflags:
+      - -X github.com/cagiti/yb/pkg/version.Version={{.Version}} -X github.com/cagiti/yb/pkg/version.Revision={{.ShortCommit}} -X github.com/cagiti/yb/pkg/version.BuildDate={{.CommitDate}} -X github.com/cagiti/yb/pkg/version.BuiltBy=goreleaser
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+      - s390x
+      - ppc64le
+
+  - id: yb-darwin
+    main: ./cmd/yb/yb.go
+    binary: yb
+    ldflags:
+      - -X github.com/cagiti/yb/pkg/version.Version={{.Version}} -X github.com/cagiti/yb/pkg/version.Revision={{.ShortCommit}} -X github.com/cagiti/yb/pkg/version.BuildDate={{.CommitDate}} -X github.com/cagiti/yb/pkg/version.BuiltBy=goreleaser
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+  - id: yb-windows-amd64
+    main: ./cmd/yb/yb.go
+    binary: yb
+    ldflags:
+      - -X github.com/cagiti/yb/pkg/version.Version={{.Version}} -X github.com/cagiti/yb/pkg/version.Revision={{.ShortCommit}} -X github.com/cagiti/yb/pkg/version.BuildDate={{.CommitDate}} -X github.com/cagiti/yb/pkg/version.BuiltBy=goreleaser
+    goos:
+      - windows
+    goarch:
+      - amd64
+
+archives:
+  - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "{{ .ProjectName }}-checksums.txt"
+  algorithm: sha256
+
+changelog:
+  skip: false
+
+release:
+  draft: false
+  prerelease: false
+  name_template: "{{.Tag}}"
+
+brews:
+  - name: yb
+    tap:
+      owner: cagiti
+      name: homebrew-tap
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    commit_author:
+      name: cagiti
+      email: caicooper82@gmail.com
+    folder: Formula
+    description: "Utility for use with yubikey"
