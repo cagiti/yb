@@ -16,8 +16,6 @@ builds:
       - linux
     goarch:
       - amd64
-      - s390x
-      - ppc64le
 
   - id: yb-darwin
     main: ./cmd/yb/yb.go
@@ -28,7 +26,6 @@ builds:
       - darwin
     goarch:
       - amd64
-      - arm64
 
   - id: yb-windows-amd64
     main: ./cmd/yb/yb.go
