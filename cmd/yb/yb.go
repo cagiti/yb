@@ -6,7 +6,9 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/cagiti/yb/pkg/cmd"
+	"github.com/cagiti/yb/pkg/cmd/check"
+	"github.com/cagiti/yb/pkg/cmd/list"
+
 	"github.com/cagiti/yb/pkg/util"
 	"github.com/cagiti/yb/pkg/version"
 	"github.com/sirupsen/logrus"
@@ -56,7 +58,8 @@ func init() {
 		return &FlagError{Err: err}
 	})
 
-	RootCmd.AddCommand(cmd.NewListCmd())
+	RootCmd.AddCommand(list.NewListCmd())
+	RootCmd.AddCommand(check.NewCheckCmd())
 
 	RootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
 		if Verbose {
